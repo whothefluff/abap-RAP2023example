@@ -10,3 +10,4 @@ TODO:
 * Test localized
 * Implement Orders
 * Finish BDEF for Status
+* Clean Projection hierarchy (R_ > I_ > C_). The interface views should expose diferent behavior for the consumption views
