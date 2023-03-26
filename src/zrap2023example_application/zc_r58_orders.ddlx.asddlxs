@@ -1,0 +1,84 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Orders', 
+    typeNamePlural: 'Orderss'
+  }
+}
+annotate view ZC_R58_ORDERS with
+{
+  @UI.facet: [ {
+    id: 'idIdentification', 
+    type: #IDENTIFICATION_REFERENCE, 
+    label: 'Orders', 
+    position: 10 
+  } ]
+  @UI.lineItem: [ {
+    position: 10 , 
+    importance: #MEDIUM, 
+    label: 'ID'
+  } ]
+  @UI.identification: [ {
+    position: 10 , 
+    label: 'ID'
+  } ]
+  ID;
+  
+  @UI.lineItem: [ {
+    position: 20 , 
+    importance: #MEDIUM, 
+    label: 'ExternalID'
+  } ]
+  @UI.identification: [ {
+    position: 20 , 
+    label: 'ExternalID'
+  } ]
+  ExternalID;
+  
+  @UI.lineItem: [ {
+    position: 30 , 
+    importance: #MEDIUM, 
+    label: 'CreatedAt'
+  } ]
+  @UI.identification: [ {
+    position: 30 , 
+    label: 'CreatedAt'
+  } ]
+  CreatedAt;
+  
+  @UI.lineItem: [ {
+    position: 40 , 
+    importance: #MEDIUM, 
+    label: 'CreatedBy'
+  } ]
+  @UI.identification: [ {
+    position: 40 , 
+    label: 'CreatedBy'
+  } ]
+  CreatedBy;
+  
+  @UI.lineItem: [ {
+    position: 50 , 
+    importance: #MEDIUM, 
+    label: 'ModifiedBy'
+  } ]
+  @UI.identification: [ {
+    position: 50 , 
+    label: 'ModifiedBy'
+  } ]
+  ModifiedBy;
+  
+  @UI.hidden: true
+  LastLocalChangeAt;
+  
+  @UI.lineItem: [ {
+    position: 60 , 
+    importance: #MEDIUM, 
+    label: 'Status'
+  } ]
+  @UI.identification: [ {
+    position: 60 , 
+    label: 'Status'
+  } ]
+  Status;
+}

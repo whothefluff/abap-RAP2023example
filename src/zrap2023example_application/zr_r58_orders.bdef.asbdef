@@ -1,0 +1,134 @@
+managed implementation in class ZBP_R_R58_ORDERS unique;
+strict ( 2 );
+with draft;
+extensible {
+  with additional save;
+  with determinations on modify;
+  with validations on save;
+  with determinations on save;
+}
+
+define behavior for ZR_R58_Orders alias Orders
+  persistent table ZR58ORDER
+  draft table ZR58ORDERD
+  etag master LastLocalChangeAt
+  lock master total etag ModifiedAt
+  authorization master( global )
+  extensible
+  {
+
+    field ( mandatory : create )
+     ID;
+
+    field ( readonly )
+     CreatedAt,
+     CreatedBy,
+     ModifiedAt,
+     ModifiedBy,
+     LastLocalChangeAt,
+     LastLocalChangeBy;
+
+    field ( readonly : update )
+     ID;
+
+    field ( features : instance ) ExternalID; //
+
+//    field ( suppress ) ExternalID;
+
+    create;
+    update;
+    delete;
+
+    association _Items{ create; with draft; }
+
+    draft action Edit;
+    draft action Activate;
+    draft action Discard;
+    draft action Resume;
+    draft determine action Prepare extensible;
+
+    determination test on save { create; update; } //
+
+    determination test4 on save { field Status; } //
+
+    determination test2 on modify { field CreatedAt; } //
+
+    validation test9 on save { delete; } //
+
+    validation test8 on save { field ModifiedAt; } //
+
+    determine action test3{ determination(always) test;
+                            determination test4;
+                            validation test8; } //
+
+    factory action d [1]; //
+
+    function test1 result [1] $self; //
+
+    internal action test5;
+
+    internal function test6 result [1] $self;
+
+    save (  adjustnumbers ) action ( authorization : global , features : global  ) df;
+
+    static save(finalize) action ( precheck ) dwfsd; //action, function, default factory action,
+
+    event fdsa; //
+
+    mapping for ZR58ORDER corresponding {
+      ID = id;
+      ExternalID = external_id;
+      CreatedAt = created_at;
+      CreatedBy = created_by;
+      ModifiedAt = modified_at;
+      ModifiedBy = modified_by;
+      LastLocalChangeAt = last_local_change_at;
+      LastLocalChangeBy = last_local_change_by;
+      Status = status;
+    }
+
+  }
+
+define behavior for ZR_R58_OrderItems alias Items
+  persistent table ZR58ORDERITEM
+  draft table ZR58ORDERITEMD
+  etag master LastLocalChangeAt
+  lock dependent
+  authorization dependent
+  extensible
+  {
+
+    field ( mandatory : create )
+     ID;
+
+    field ( readonly )
+     up__ID,
+     CreatedAt,
+     CreatedBy,
+     ModifiedAt,
+     ModifiedBy,
+     LastLocalChangeAt,
+     LastLocalChangeBy;
+
+    field ( readonly : update )
+     ID;
+
+    update;
+    delete;
+
+    association _Header { with draft; }
+
+    mapping for ZR58ORDERITEM corresponding {
+      up__ID = up__id;
+      ID = id;
+      CreatedAt = created_at;
+      CreatedBy = created_by;
+      ModifiedAt = modified_at;
+      ModifiedBy = modified_by;
+      LastLocalChangeAt = last_local_change_at;
+      LastLocalChangeBy = last_local_change_by;
+      Unit = unit;
+      Quantity = quantity;
+    }
+
+  }

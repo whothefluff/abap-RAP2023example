@@ -1,0 +1,11 @@
+@EndUserText.label: 'ZI_R58_ORDERS'
+@MappingRole: true
+define role ZI_R58_ORDERS {
+  grant
+    select
+      on
+        ZI_R58_Orders
+          where
+            inheriting conditions from entity ZR_R58_Orders;
+            
+}
