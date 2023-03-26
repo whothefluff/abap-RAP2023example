@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition forZI_R58_ORDERSTATUSES'
+define service Z_R58_ORDERSTATUSES {
+  expose ZI_R58_ORDERSTATUSES as OrderStatuses;
+}

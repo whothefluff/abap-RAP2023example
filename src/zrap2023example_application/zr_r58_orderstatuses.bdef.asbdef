@@ -1,0 +1,101 @@
+managed implementation in class zbp_R_R58_OrderStatuses unique;
+strict( 2 );
+with draft;
+extensible {
+  with additional save;
+  with determinations on modify;
+  with validations on save;
+  with determinations on save;
+}
+
+define behavior for ZR_R58_OrderStatuses alias OrderStatuses
+  persistent table ZR58ORDERSTATUS
+  draft table ZR58ORDERSTATUSD
+  etag master LastLocalChangeAt
+  lock master total etag ModifiedAt
+  authorization master( global )
+  extensible
+  {
+
+    field( mandatory : create, readonly : update )
+     ID;
+
+    field( mandatory )
+     Name,
+     Description;
+
+    field( readonly )
+     CreatedAt,
+     CreatedBy,
+     ModifiedAt,
+     ModifiedBy,
+     LastLocalChangeAt,
+     LastLocalChangeBy;
+
+    create( authorization : none );
+    update( features : global );
+    delete( features : global );
+
+    association _Texts {
+      create;
+      with draft;
+    }
+
+    draft action Edit;
+    draft action Activate;
+    draft action Discard;
+    draft action Resume;
+    draft determine action Prepare extensible;
+
+    mapping for ZR58ORDERSTATUS corresponding {
+      ID = id;
+      CreatedAt = created_at;
+      CreatedBy = created_by;
+      ModifiedAt = modified_at;
+      ModifiedBy = modified_by;
+      Name = name;
+      Description = description;
+    }
+
+  }
+
+define behavior for ZR_R58_OrderStatusTexts alias OrderStatusTexts
+  persistent table ZR58ORDERSTATTX
+  draft table ZR58ORDERSTATTXD
+  etag dependent
+  lock dependent
+  authorization dependent
+  extensible
+  {
+
+    field( mandatory : create, readonly : update )
+     Language,
+     ID;
+
+    field( mandatory )
+     Name,
+     Description;
+
+    field( readonly )
+     CreatedAt,
+     CreatedBy,
+     ModifiedAt,
+     ModifiedBy;
+
+    update( features : global );
+    delete( features : global );
+
+    association _Status { with draft; }
+
+    mapping for ZR58ORDERSTATTX corresponding {
+      Language = language;
+      ID = id;
+      CreatedAt = created_at;
+      CreatedBy = created_by;
+      ModifiedAt = modified_at;
+      ModifiedBy = modified_by;
+      Name = name;
+      Description = description;
+    }
+
+  }

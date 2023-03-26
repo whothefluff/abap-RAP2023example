@@ -19,8 +19,6 @@ define view entity ZR_R58_OrderItems
     created_by as Createdby,
     modified_at as Modifiedat,
     modified_by as Modifiedby,
-    last_local_change_at as LastLocalChangeAt,
-    last_local_change_by as LastLocalChangeBy,
     unit as Unit,
     quantity as Quantity,
     _Header,

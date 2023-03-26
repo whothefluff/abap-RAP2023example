@@ -1,5 +1,5 @@
 managed implementation in class ZBP_R_R58_ORDERS unique;
-strict ( 2 );
+strict( 2 );
 with draft;
 extensible {
   with additional save;
@@ -17,65 +17,74 @@ define behavior for ZR_R58_Orders alias Orders
   extensible
   {
 
-    field ( mandatory : create )
-     ID;
+    field( mandatory: create, readonly: update )
+     ID,
+     ExternalID;
 
-    field ( readonly )
+    field( readonly )
      CreatedAt,
      CreatedBy,
      ModifiedAt,
      ModifiedBy,
      LastLocalChangeAt,
-     LastLocalChangeBy;
+     LastLocalChangeBy,
+     TotalQuantityInKG;
 
-    field ( readonly : update )
-     ID;
-
-    field ( features : instance ) ExternalID; //
+//    field( features : instance ) Status;
 
 //    field ( suppress ) ExternalID;
 
-    create;
-    update;
-    delete;
+    create( precheck );  //use to make sure the external id is unique (by calling validation?)
+    update( features: instance ); //use to make sure the status is modifiable (by calling validation?)
+    delete( features: instance ); // same as above
 
-    association _Items{ create; with draft; }
+    association _Items {
+      create( features: instance ); // same as above
+      with draft;
+    }
+    association _Status{ create; } //?????????
 
     draft action Edit;
     draft action Activate;
     draft action Discard;
     draft action Resume;
-    draft determine action Prepare extensible;
+    draft determine action Prepare extensible {
+      validation Items~AssureQtyIsPositive;
+    }
 
-    determination test on save { create; update; } //
+    determination AssignExternalID on save {
+      create;
+      field ID;
+    } //self-explanatory
 
-    determination test4 on save { field Status; } //
+    determination RecalculateSumInKG on modify {
+      create;
+      update;
+    } //sum all items converting to KG
 
-    determination test2 on modify { field CreatedAt; } //
+    determine action PrepareForPersistance extensible {
+      determination AssignExternalID;
+      validation Items~AssureQtyIsPositive;
+    } //can be called from EML?
 
-    validation test9 on save { delete; } //
+    factory action Duplicate [1]; //self-explanatory
 
-    validation test8 on save { field ModifiedAt; } //
+    action Post
+      result[1] $self; //self-explanatory
 
-    determine action test3{ determination(always) test;
-                            determination test4;
-                            validation test8; } //
+    static function ReturnPosted
+      result[0..*] $self; //self-explanatory
 
-    factory action d [1]; //
+    function CalculateSUM
+      result selective[1] $self; //self-explanatory
 
-    function test1 result [1] $self; //
+    save( adjustnumbers ) action( authorization: global, features: global ) test; //is this an action????
 
-    internal action test5;
+    static save(finalize) action( precheck ) test2; //is this an action????
 
-    internal function test6 result [1] $self;
+    event Posted; //supposedly workds with SAP Event Mesh
 
-    save (  adjustnumbers ) action ( authorization : global , features : global  ) df;
-
-    static save(finalize) action ( precheck ) dwfsd; //action, function, default factory action,
-
-    event fdsa; //
-
-    mapping for ZR58ORDER corresponding {
+    mapping for ZR58ORDER corresponding extensible {
       ID = id;
       ExternalID = external_id;
       CreatedAt = created_at;
@@ -92,41 +101,42 @@ define behavior for ZR_R58_Orders alias Orders
 define behavior for ZR_R58_OrderItems alias Items
   persistent table ZR58ORDERITEM
   draft table ZR58ORDERITEMD
-  etag master LastLocalChangeAt
+  etag dependent
   lock dependent
   authorization dependent
   extensible
   {
 
-    field ( mandatory : create )
+    field( mandatory: create, readonly: update )
+     up__ID,
      ID;
 
-    field ( readonly )
-     up__ID,
+    field( mandatory )
+     Unit,
+     Quantity;
+
+    field( readonly )
      CreatedAt,
      CreatedBy,
      ModifiedAt,
-     ModifiedBy,
-     LastLocalChangeAt,
-     LastLocalChangeBy;
+     ModifiedBy;
 
-    field ( readonly : update )
-     ID;
-
-    update;
-    delete;
+    update( features: instance ); //use to make sure only allowed if status is correct (by calling validation?)
+    delete( features: instance ); //same as above
 
     association _Header { with draft; }
 
-    mapping for ZR58ORDERITEM corresponding {
+    validation AssureQtyIsPositive on save { field Quantity; } //self-explanatory
+
+    factory action Duplicate [1]; //self-explanatory
+
+    mapping for ZR58ORDERITEM corresponding extensible {
       up__ID = up__id;
       ID = id;
       CreatedAt = created_at;
       CreatedBy = created_by;
       ModifiedAt = modified_at;
       ModifiedBy = modified_by;
-      LastLocalChangeAt = last_local_change_at;
-      LastLocalChangeBy = last_local_change_by;
       Unit = unit;
       Quantity = quantity;
     }

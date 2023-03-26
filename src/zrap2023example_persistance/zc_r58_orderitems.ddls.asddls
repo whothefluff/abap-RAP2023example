@@ -11,8 +11,6 @@ define view entity ZC_R58_OrderItems
     Createdby,
     Modifiedat,
     Modifiedby,
-    LastLocalChangeAt,
-    LastLocalChangeBy,
     Unit,
     Quantity,
     _Header : redirected to parent ZC_R58_Orders,

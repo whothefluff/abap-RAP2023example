@@ -1,0 +1,11 @@
+@EndUserText.label: 'ZR_R58_ORDERSTATUSES'
+@MappingRole: true
+define role ZR_R58_ORDERSTATUSES {
+  grant
+    select
+      on
+        ZR_R58_OrderStatuses
+          where
+            CreatedBy = aspect user;
+            
+}
