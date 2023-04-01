@@ -1,4 +1,7 @@
 @EndUserText.label: 'Service definition forZC_R58_ORDERS'
 define service Z_R58_ORDERS {
   expose ZC_R58_Orders as Orders;
+  expose ZC_R58_OrderItems as OrderItems;
+  expose ZC_R58_ViewOrders as OrderViewer;
+  expose ZC_R58_ViewOrderItems as OrderItemViewer;
 }

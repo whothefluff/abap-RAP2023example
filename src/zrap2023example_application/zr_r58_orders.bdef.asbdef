@@ -30,9 +30,9 @@ define behavior for ZR_R58_Orders alias Orders
      LastLocalChangeBy,
      TotalQuantityInKG;
 
-//    field( features : instance ) Status;
+//    field( features : instance ) Status; can make a field mandatory or not dynamically
 
-//    field ( suppress ) ExternalID;
+//    field ( suppress ) ExternalID; can "ignore" fields
 
     create( precheck );  //use to make sure the external id is unique (by calling validation?)
     update( features: instance ); //use to make sure the status is modifiable (by calling validation?)
@@ -50,6 +50,14 @@ define behavior for ZR_R58_Orders alias Orders
     draft action Resume;
     draft determine action Prepare extensible {
       validation Items~AssureQtyIsPositive;
+    }
+
+    internal static function GetEntityWithGreatestExtID
+      result selective [1] $self;
+
+    validation AssureExtIDIsUnique on save {
+      create;
+      field ExternalID;
     }
 
     determination AssignExternalID on save {

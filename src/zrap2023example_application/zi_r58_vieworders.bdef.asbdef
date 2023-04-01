@@ -1,0 +1,18 @@
+interface;
+
+define behavior for ZI_R58_ViewOrders alias Orders
+  {
+
+    use function ReturnPosted;
+    use function CalculateSUM;
+
+    use association _Items;
+
+  }
+
+define behavior for ZI_R58_ViewOrderItems alias Items
+  {
+
+    use association _Header;
+
+  }
