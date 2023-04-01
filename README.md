@@ -6,7 +6,7 @@ Good to know:
 - Creating DB names with ABAP notation is automatically translated to camelcase in CDS
 
 TODO:
-* Test virtual aggr and determination aggr
+* Test virtual aggr (cons: only for RAP, generic types, calc fields by index with no ID, needs add class) and determination aggr (cons: only for RAP)
 * Test localized
 * Implement Orders
 * Finish BDEF for Status
