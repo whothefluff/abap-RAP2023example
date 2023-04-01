@@ -191,6 +191,8 @@ class lhc_Orders definition
               for validate on save
               importing
                 keys for Orders~AssureExtIDIsUnique.
+    methods GetEntityWithGreatestExtID for read
+      importing keys for function Orders~GetEntityWithGreatestExtID request requested_fields result result.
 
 endclass.
 
@@ -256,8 +258,24 @@ class lhc_Orders implementation.
       result data(result).
 
   endmethod.
-  method assureextidisunique.
+  method AssureExtIDIsUnique.
 
+
+
+
+  endmethod.
+  method GetEntityWithGreatestExtID.
+
+    select ID,
+           max( ExternalID ) over( order by ID descending ) as ext_id
+      from ZR_R58_Orders
+      into @data(max_ext_id) up to 1 rows.
+
+
+
+*      result = value #( %cid = value #( ) ).
+
+    endselect.
 
   endmethod.
 
